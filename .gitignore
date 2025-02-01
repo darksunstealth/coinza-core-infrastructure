@@ -1,2 +1,2 @@
-node_nodules
-.log
+node_modules/
+*.log
