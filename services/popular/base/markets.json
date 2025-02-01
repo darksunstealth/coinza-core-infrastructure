@@ -1,0 +1,86 @@
+[
+  {
+    "id": "BTCUSDT",
+    "base": "BTC",
+    "quote": "USDT",
+    "precision": {
+      "price": 2,
+      "amount": 6
+    },
+    "minOrderSize": 0.0001,
+    "maxOrderSize": 100,
+    "status": "active",
+    "priceTickSize": 0.01,
+    "amountTickSize": 0.000001
+  },
+  {
+    "id": "ETHUSDT",
+    "base": "ETH",
+    "quote": "USDT",
+    "precision": {
+      "price": 2,
+      "amount": 6
+    },
+    "minOrderSize": 0.001,
+    "maxOrderSize": 500,
+    "status": "active",
+    "priceTickSize": 0.01,
+    "amountTickSize": 0.000001
+  },
+  {
+    "id": "SOLUSDT",
+    "base": "SOL",
+    "quote": "USDT",
+    "precision": {
+      "price": 3,
+      "amount": 3
+    },
+    "minOrderSize": 0.01,
+    "maxOrderSize": 1000,
+    "status": "active",
+    "priceTickSize": 0.001,
+    "amountTickSize": 0.001
+  },
+  {
+    "id": "DOGEUSDT",
+    "base": "DOGE",
+    "quote": "USDT",
+    "precision": {
+      "price": 6,
+      "amount": 0
+    },
+    "minOrderSize": 1,
+    "maxOrderSize": 1000000,
+    "status": "active",
+    "priceTickSize": 0.000001,
+    "amountTickSize": 1
+  },
+  {
+    "id": "BTCBRL",
+    "base": "BTC",
+    "quote": "BRL",
+    "precision": {
+      "price": 2,
+      "amount": 6
+    },
+    "minOrderSize": 0.0001,
+    "maxOrderSize": 50,
+    "status": "active",
+    "priceTickSize": 0.01,
+    "amountTickSize": 0.000001
+  },
+  {
+    "id": "ETHBRL",
+    "base": "ETH",
+    "quote": "BRL",
+    "precision": {
+      "price": 2,
+      "amount": 6
+    },
+    "minOrderSize": 0.001,
+    "maxOrderSize": 500,
+    "status": "active",
+    "priceTickSize": 0.01,
+    "amountTickSize": 0.000001
+  }
+]

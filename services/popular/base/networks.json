@@ -1,0 +1,103 @@
+[
+    {
+      "id": "BITCOIN",
+      "network": "BTC",
+      "protocol": "blockcypher",
+      "type": "Native",
+      "isEVMCompatible": false,
+      "tokenSupport": false,
+      "contractSupport": false,
+      "mainNetworkId": null,
+      "iconUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png",
+      "explorerUrl": "https://www.blockchain.com/explorer",
+      "apiBaseUrl": "https://api.blockcypher.com/v1/btc",
+      "endpoints": {
+        "verifyAddress": "/main/addrs/{address}/balance",
+        "createWallet": "/main/addrs",
+        "makeTransaction": "/main/txs/new",
+        "sendTransaction": "/main/txs/send",
+        "identifyDeposits": "/main/addrs/{address}/full",
+        "getBlock": "/blocks/{hash}",
+        "getTransaction": "/txs/{hash}"
+      },
+      "authToken": "e4cd6676ac9c4096bee7a683d35e8b68",
+      "createdAt": "2024-01-30T00:00:00.000Z",
+      "updatedAt": "2024-01-30T00:00:00.000Z"
+    },
+    {
+      "id": "ETHEREUM",
+      "network": "ETH",
+      "protocol": "blockcypher",
+      "type": "EVM-compatible",
+      "isEVMCompatible": true,
+      "tokenSupport": true,
+      "contractSupport": true,
+      "mainNetworkId": null,
+      "iconUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png",
+      "explorerUrl": "https://etherscan.io/",
+      "apiBaseUrl": "https://api.blockcypher.com/v1/eth",
+      "endpoints": {
+        "verifyAddress": "/main/addrs/{address}/balance",
+        "createWallet": "/main/addrs",
+        "makeTransaction": "/main/txs/new",
+        "sendTransaction": "/main/txs/send",
+        "identifyDeposits": "/main/addrs/{address}/full",
+        "getBlock": "/blocks/{hash}",
+        "getTransaction": "/txs/{hash}"
+      },
+      "authToken": "e4cd6676ac9c4096bee7a683d35e8b68",
+      "createdAt": "2024-01-30T00:00:00.000Z",
+      "updatedAt": "2024-01-30T00:00:00.000Z"
+    },
+    {
+      "id": "LITECOIN",
+      "network": "LTC",
+      "protocol": "blockcypher",
+      "type": "Native",
+      "isEVMCompatible": false,
+      "tokenSupport": false,
+      "contractSupport": false,
+      "mainNetworkId": null,
+      "iconUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/2.png",
+      "explorerUrl": "https://live.blockcypher.com/ltc/",
+      "apiBaseUrl": "https://api.blockcypher.com/v1/ltc",
+      "endpoints": {
+        "verifyAddress": "/main/addrs/{address}/balance",
+        "createWallet": "/main/addrs",
+        "makeTransaction": "/main/txs/new",
+        "sendTransaction": "/main/txs/send",
+        "identifyDeposits": "/main/addrs/{address}/full",
+        "getBlock": "/blocks/{hash}",
+        "getTransaction": "/txs/{hash}"
+      },
+      "authToken": "e4cd6676ac9c4096bee7a683d35e8b68",
+      "createdAt": "2024-01-30T00:00:00.000Z",
+      "updatedAt": "2024-01-30T00:00:00.000Z"
+    },
+    {
+      "id": "DOGECOIN",
+      "network": "DOGE",
+      "protocol": "blockcypher",
+      "type": "Native",
+      "isEVMCompatible": false,
+      "tokenSupport": false,
+      "contractSupport": false,
+      "mainNetworkId": null,
+      "iconUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/74.png",
+      "explorerUrl": "https://live.blockcypher.com/doge/",
+      "apiBaseUrl": "https://api.blockcypher.com/v1/doge",
+      "endpoints": {
+        "verifyAddress": "/main/addrs/{address}/balance",
+        "createWallet": "/main/addrs",
+        "makeTransaction": "/main/txs/new",
+        "sendTransaction": "/main/txs/send",
+        "identifyDeposits": "/main/addrs/{address}/full",
+        "getBlock": "/blocks/{hash}",
+        "getTransaction": "/txs/{hash}"
+      },
+      "authToken": "e4cd6676ac9c4096bee7a683d35e8b68",
+      "createdAt": "2024-01-30T00:00:00.000Z",
+      "updatedAt": "2024-01-30T00:00:00.000Z"
+    }
+  ]
+  

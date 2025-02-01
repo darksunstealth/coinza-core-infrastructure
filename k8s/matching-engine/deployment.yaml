@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: matching-engine
+  namespace: matching-engine
+  labels:
+    app: matching-engine
+spec:
+  replicas: 3  # O HPA pode modificar isso automaticamente
+  selector:
+    matchLabels:
+      app: matching-engine
+  template:
+    metadata:
+      labels:
+        app: matching-engine
+    spec:
+      containers:
+        - name: matching-engine
+          image: samirsauma/matching-engine:v78
+          ports:
+            - containerPort: 3000
+          env:
+            - name: REDIS_NODES
+              value: "redis-cluster-0.redis-cluster.redis-cluster.svc.cluster.local:6379,redis-cluster-1.redis-cluster.redis-cluster.svc.cluster.local:6379,redis-cluster-2.redis-cluster.redis-cluster.svc.cluster.local:6379"
+            - name: NODE_ENV
+              value: "production"
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          readinessProbe:
+            httpGet:
+              path: /test
+              port: 3000
+            initialDelaySeconds: 30  # Mais tempo para garantir que está pronto
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 5
+          livenessProbe:
+            httpGet:
+              path: /test
+              port: 3000
+            initialDelaySeconds: 60  # Mais tempo para a API subir
+            periodSeconds: 20
+            timeoutSeconds: 2
+            failureThreshold: 5

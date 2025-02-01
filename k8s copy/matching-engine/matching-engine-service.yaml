@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: matching-engine
+  namespace: matching-engine
+spec:
+  selector:
+    app: matching-engine
+  ports:
+    - protocol: TCP
+      port: 80  # Porta do Service
+      targetPort: 3000  # Porta do container

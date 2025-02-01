@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis-cluster
+  namespace: redis-cluster
+  labels:
+    app: redis
+spec:
+  serviceName: redis-cluster
+  replicas: 6  # Exemplo: 3 mestres e 3 réplicas
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      initContainers:
+        - name: fix-permissions
+          image: busybox
+          command: ["sh", "-c", "chown -R 1000:1000 /data"]
+          volumeMounts:
+            - name: redis-data
+              mountPath: /data
+      containers:
+        - name: redis
+          image: redis:7.0-alpine
+          command:
+          - "sh"
+          - "-c"
+          - |
+              exec redis-server /etc/redis/redis.conf
+
+
+          ports:
+            - containerPort: 6379
+          volumeMounts:
+            - name: redis-config
+              mountPath: /etc/redis
+              readOnly: true
+            - name: redis-data
+              mountPath: /data
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+      # Montagem do ConfigMap (não necessita de PVC)
+      volumes:
+        - name: redis-config
+          configMap:
+            name: redis-cluster-config
+            items:
+              - key: redis.conf
+                path: redis.conf
+  volumeClaimTemplates:
+    - metadata:
+        name: redis-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi

@@ -1,0 +1,113 @@
+[
+    {
+      "name": "Tether",
+      "symbol": "USDT",
+      "tipo": "stablecoin",
+      "iconUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/825.png",
+      "fiatCurrency": false,
+      "isFiat": false,
+      "status": "active",
+      "contratos": {
+        "ETH": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+        "TRC20": "TXLZFFwzLRj7n3PdBiqF7fJfTBVfEghzU7",
+        "SOLANA": "Es9vMfrpYZWz3KxTG25q9T5JNQaP1sCF66iud4Ab9Z9A"
+      },
+      "networks": ["ETH", "TRC20", "SOLANA"],
+      "id": "uuid-1",
+      "createdAt": "2024-01-30T00:00:00.000Z",
+      "updatedAt": "2024-01-30T00:00:00.000Z"
+    },
+    {
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "tipo": "stablecoin",
+      "iconUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png",
+      "fiatCurrency": false,
+      "isFiat": false,
+      "status": "active",
+      "contratos": {
+        "ETH": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+        "SOLANA": "AQAixpLRnKWaM1VpU4BQU9fUPT5yXn4qpxv5K6JjzgNT"
+      },
+      "networks": ["ETH", "SOLANA"],
+      "id": "uuid-2",
+      "createdAt": "2024-01-30T00:00:00.000Z",
+      "updatedAt": "2024-01-30T00:00:00.000Z"
+    },
+    {
+      "name": "Wrapped Bitcoin",
+      "symbol": "WBTC",
+      "tipo": "cryptocurrency",
+      "iconUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/3717.png",
+      "fiatCurrency": false,
+      "isFiat": false,
+      "status": "active",
+      "contratos": {
+        "ETH": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599"
+      },
+      "networks": ["ETH"],
+      "id": "uuid-3",
+      "createdAt": "2024-01-30T00:00:00.000Z",
+      "updatedAt": "2024-01-30T00:00:00.000Z"
+    },
+    {
+      "name": "Brazilian Real",
+      "symbol": "BRL",
+      "tipo": "fiat",
+      "iconUrl": "https://cdn-icons-png.flaticon.com/512/2151/2151343.png",
+      "fiatCurrency": true,
+      "isFiat": true,
+      "status": "active",
+      "contratos": null,
+      "networks": null,
+      "id": "uuid-4",
+      "createdAt": "2024-01-30T00:00:00.000Z",
+      "updatedAt": "2024-01-30T00:00:00.000Z"
+    },
+    {
+      "name": "US Dollar",
+      "symbol": "USD",
+      "tipo": "fiat",
+      "iconUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRv8LDeLS5rtC7ITgEMNbDvOl7QIWtzA8017g&s",
+      "fiatCurrency": true,
+      "isFiat": true,
+      "status": "active",
+      "contratos": null,
+      "networks": null,
+      "id": "uuid-5",
+      "createdAt": "2024-01-30T00:00:00.000Z",
+      "updatedAt": "2024-01-30T00:00:00.000Z"
+    },
+    {
+      "name": "Euro",
+      "symbol": "EUR",
+      "tipo": "fiat",
+      "iconUrl": "https://cdn-icons-png.flaticon.com/512/197/197615.png",
+      "fiatCurrency": true,
+      "isFiat": true,
+      "status": "active",
+      "contratos": null,
+      "networks": null,
+      "id": "uuid-6",
+      "createdAt": "2024-01-30T00:00:00.000Z",
+      "updatedAt": "2024-01-30T00:00:00.000Z"
+    },
+    {
+      "name": "Dai",
+      "symbol": "DAI",
+      "tipo": "stablecoin",
+      "iconUrl": "https://s2.coinmarketcap.com/static/img/coins/64x64/4943.png",
+      "fiatCurrency": false,
+      "isFiat": false,
+      "status": "active",
+      "contratos": {
+        "ETH": "0x6b175474e89094c44da98b954eedeac495271d0f",
+        "SOLANA": "3kbuwstWg7wG2U8fXyFzMoEZ6P6yQ6yHzScC6Q6Ycv8J"
+      },
+      "networks": ["ETH", "SOLANA"],
+      "id": "uuid-7",
+      "createdAt": "2024-01-30T00:00:00.000Z",
+      "updatedAt": "2024-01-30T00:00:00.000Z"
+    }
+  ]
+  
