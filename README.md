@@ -1,36 +1,42 @@
 
 # ⚡ Coinza Scalling – Distributed Microservice Architecture
 
-This repository contains the foundation for the scalable backend of **Coinza Exchange**.  
-It showcases a microservice architecture built with **Kubernetes**, **Kafka**, **Redis**, and **PostgreSQL**.
+This repository showcases the **microservice infrastructure** of Coinza Exchange. It includes authentication, Redis setup, PostgreSQL integration, Kafka communication, and Kubernetes deployments.
 
-> ⚠️ **NOTE:** The original matching engine processor was corrupted. This repository only demonstrates the **microservices structure and flow**.  
-> Some files may be broken or partially implemented. These issues do **not prevent the system from working**, and will be fixed gradually when time allows.
+> ⚠️ **Important:**  
+> The matching engine processor (C++ component that executed the orderbook logic) is **corrupted** and currently **non-functional**.  
+> This repo **only demonstrates the flow and architecture** of services, not the matching logic.
+
+> 🛠 Some files may be broken, incomplete, or in progress — but **core functionalities remain unaffected**.  
+> As soon as I find time, I’ll fix these issues and improve the system incrementally.
+
+> 🤝 **Feel free to contribute** if you'd like to help bring this system closer to full functionality.
 
 ---
 
-## 📦 Tech Stack
+## 📦 Stack Overview
 
-- **Node.js** – Application logic (e.g. register-user service)
-- **Apache Kafka (Strimzi)** – Messaging layer
-- **Redis Cluster** – High-speed caching
-- **PostgreSQL** – Persistent database
-- **Zookeeper** – Kafka coordination
+- **Node.js** – Core services (authentication, user management)
+- **Apache Kafka (Strimzi)** – Event-driven architecture
+- **Redis Cluster** – High-speed distributed cache
+- **PostgreSQL** – Primary relational database
+- **Zookeeper** – Kafka dependency
+- **C++** – Matching engine (currently corrupted)
+- **Kubernetes** – Deployment, scaling, and service orchestration
 - **Docker** – Container builds
-- **Kubernetes** – Orchestration (Helm, StatefulSet, ConfigMap, HPA, Ingress)
 
 ---
 
 ## 🚀 Getting Started
 
-### Install Helm and set context to Minikube
+### Helm + Minikube Setup
 
 ```bash
 sudo snap install helm --classic
 kubectl config use-context minikube
 ```
 
-### Deploy Core Infrastructure
+### Deploy Infrastructure
 
 ```bash
 kubectl apply -f k8s/redis/redis-configmap.yaml
@@ -44,17 +50,19 @@ kubectl apply -f k8s/zookeeper/zookeeper-deployment.yaml
 kubectl apply -f k8s/zookeeper/zookeeper-service.yaml
 kubectl apply -f k8s/kafka/kafka-statefulset.yaml
 kubectl apply -f k8s/kafka/kafka-service.yaml
-kubectl apply -f k8s/popular/base/init-variables-on-redis.yaml
 
 kubectl apply -f k8s/matching-engine/deployment.yaml
 kubectl apply -f k8s/matching-engine/hpa-matching-engine.yaml
 kubectl apply -f k8s/matching-engine/matching-engine-service.yaml
 kubectl apply -f k8s/matching-engine/matching-engine-ingress.yaml
+
+kubectl apply -f k8s/popular/base/init-variables-on-redis.yaml
+kubectl apply -f k8s/meuusuario-csr.yaml
 ```
 
 ---
 
-## 🧠 Redis Cluster Initialization
+## 🧠 Redis Cluster Setup
 
 ```bash
 echo "yes" | redis-cli --cluster create \
@@ -69,7 +77,7 @@ echo "yes" | redis-cli --cluster create \
 
 ---
 
-## 🐳 Docker Builds
+## 🐳 Docker
 
 ```bash
 docker build -t samirsauma/matching-engine:v78 .
@@ -81,7 +89,7 @@ docker push samirsauma/init-variables-on-redis:v6
 
 ---
 
-## 📡 Kafka Topics
+## 📡 Kafka Topics (Example)
 
 ```bash
 kubectl exec -it kafka-0 -n kafka -- \
@@ -94,7 +102,7 @@ kubectl exec -it kafka-0 -n kafka -- \
 
 ---
 
-## 🔁 Restart Services
+## 🔁 Restart Matching Engine
 
 ```bash
 kubectl rollout restart deployment matching-engine -n matching-engine
@@ -102,7 +110,7 @@ kubectl rollout restart deployment matching-engine -n matching-engine
 
 ---
 
-## 🔍 Logs
+## 🔍 Debugging Logs
 
 ```bash
 kubectl logs -l app=matching-engine -n matching-engine --tail=100 --follow
@@ -111,51 +119,41 @@ kubectl logs -f matching-engine-[pod-id] -n matching-engine
 
 ---
 
-## 🧼 Kafka Cleanup
-
-```bash
-kubectl delete statefulset kafka -n kafka --cascade=foreground
-kubectl delete statefulset zookeeper -n kafka --cascade=foreground
-kubectl delete svc kafka -n kafka
-kubectl delete svc zookeeper -n kafka
-kubectl delete pvc -n kafka --all
-kubectl delete namespace kafka
-```
-
----
-
-## 🧠 Architecture (DOT Graph)
+## 🧠 Architecture Overview (.dot)
 
 ```dot
-digraph CoinzaMicroservices {
+digraph CoinzaScalling {
   rankdir=LR;
   node [shape=box, style=filled, fontname="Arial", color=lightgray];
 
   User [label="User"];
   Ingress [label="Ingress Controller", color=lightblue];
-  RegisterService [label="Register API (Node.js)", color=lightgreen];
+  Register [label="Register API", color=lightgreen];
   Redis [label="Redis Cluster", color=lightpink];
   Kafka [label="Kafka", color=orange];
   Zookeeper [label="Zookeeper", color=lightyellow];
-  Postgres [label="PostgreSQL", color=lightgray];
+  Postgres [label="PostgreSQL"];
+  Matching [label="Matching Engine (C++)", color=red, style=filled, fontcolor=white];
 
   User -> Ingress;
-  Ingress -> RegisterService;
-  RegisterService -> Redis [label="cache"];
-  RegisterService -> Kafka [label="produce"];
-  Kafka -> Zookeeper [label="coordination"];
-  RegisterService -> Postgres [label="store"];
+  Ingress -> Register;
+  Register -> Redis [label="cache"];
+  Register -> Kafka [label="produce"];
+  Kafka -> Zookeeper;
+  Register -> Postgres;
+
+  // Matching engine is not wired in
 }
 ```
 
 ---
 
-### 🧊 Status
+## 🧊 Final Notes
 
-- Matching logic is currently **not available** (corrupted processor)
-- System structure is functional
-- Some files may be incomplete/corrupted — to be fixed gradually
+- 🔧 Matching processor (C++) is corrupted and excluded from orchestration.
+- 🪛 Files are under construction. Expect partial implementations.
+- 🤝 Pull requests welcome to improve or complete parts of the system.
 
 ---
 
-### ✌️ Built by Samir Sauma — Coinza Exchange (WaaS Infra)
+### ✌️ Made by Samir Sauma — Coinza Exchange WaaS
