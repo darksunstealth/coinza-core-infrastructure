@@ -1,25 +1,26 @@
 
-# ⚡ Coinza Scalling (Matching Engine Distribuído)
+# ⚡ Coinza Scalling (Distributed Matching Engine)
 
-Esse projeto representa o core de processamento da Coinza Exchange, um **matching engine escalável**, distribuído via Kubernetes, usando **Redis Cluster**, **PostgreSQL** e **Apache Kafka** (⛔️ *nada de RabbitMQ aqui!*).
-
----
-
-## 📦 Tecnologias Utilizadas
-
-- Node.js
-- Redis (Cluster)
-- PostgreSQL
-- Apache Kafka (via Strimzi)
-- Zookeeper
-- Kubernetes (Helm, ConfigMap, StatefulSet, HPA, Ingress)
-- Docker
+This project represents the processing core of **Coinza Exchange** — a **scalable and distributed matching engine** built with **Kubernetes**, using **Redis Cluster**, **PostgreSQL**, and **Apache Kafka** (⛔️ *no RabbitMQ here!*).
 
 ---
 
-## 🚀 Como Subir no Minikube
+## 📦 Stack Overview
 
-### 1. Pré-requisitos
+- **Node.js** – Main engine logic
+- **Redis Cluster** – High-performance in-memory caching and real-time operations
+- **PostgreSQL** – Reliable transactional data storage
+- **Apache Kafka (via Strimzi)** – Messaging backbone for decoupled communication
+- **Zookeeper** – Kafka coordination
+- **Kubernetes (Helm, ConfigMap, StatefulSet, HPA, Ingress)** – Container orchestration and scaling
+- **Docker** – Image packaging
+
+---
+
+## 🚀 Getting Started on Minikube
+
+### 1. Prerequisites
+
 ```bash
 sudo snap install helm --classic
 kubectl config use-context minikube
@@ -27,9 +28,10 @@ kubectl config use-context minikube
 
 ---
 
-## 🔧 Deploy da Infraestrutura
+## 🔧 Deploy the Infrastructure
 
 ### Redis Cluster
+
 ```bash
 kubectl apply -f k8s/redis/redis-configmap.yaml
 kubectl apply -f k8s/redis/redis-pv.yaml
@@ -38,11 +40,13 @@ kubectl apply -f k8s/redis/redis-statefulset.yaml
 ```
 
 ### PostgreSQL
+
 ```bash
 kubectl apply -f k8s/postgres/postgres.yaml
 ```
 
 ### Matching Engine (Core)
+
 ```bash
 kubectl apply -f k8s/matching-engine/deployment.yaml
 kubectl apply -f k8s/matching-engine/hpa-matching-engine.yaml
@@ -50,14 +54,16 @@ kubectl apply -f k8s/matching-engine/matching-engine-service.yaml
 kubectl apply -f k8s/matching-engine/matching-engine-ingress.yaml
 ```
 
-### Init de Variáveis no Redis
+### Initialize Redis Variables
+
 ```bash
 kubectl apply -f k8s/popular/base/init-variables-on-redis.yaml
 ```
 
 ---
 
-### Apache Kafka + Zookeeper (Strimzi)
+## 🛰 Kafka & Zookeeper with Strimzi
+
 ```bash
 kubectl create namespace kafka
 kubectl apply -f https://strimzi.io/install/latest?namespace=kafka
@@ -71,7 +77,8 @@ kubectl apply -f k8s/kafka/kafka-service.yaml
 
 ---
 
-## 🧠 Cluster Redis - Criação
+## 🧠 Redis Cluster Creation
+
 ```bash
 echo "yes" | redis-cli --cluster create \
   redis-cluster-0.redis-cluster.redis-cluster.svc.cluster.local:6379 \
@@ -85,7 +92,8 @@ echo "yes" | redis-cli --cluster create \
 
 ---
 
-## 🐳 Docker - Build e Deploy
+## 🐳 Docker Builds
+
 ```bash
 docker build -t samirsauma/matching-engine:v78 .
 docker push samirsauma/matching-engine:v78
@@ -96,14 +104,16 @@ docker push samirsauma/init-variables-on-redis:v4
 
 ---
 
-## 🔁 Restart do Matching Engine
+## 🔁 Restart Matching Engine
+
 ```bash
 kubectl rollout restart deployment matching-engine -n matching-engine
 ```
 
 ---
 
-## 🔎 Logs
+## 🔍 Logs & Debug
+
 ```bash
 kubectl logs -l app=matching-engine -n matching-engine --tail=100 --follow
 kubectl logs -f matching-engine-[pod-id] -n matching-engine
@@ -112,7 +122,10 @@ kubectl logs --previous matching-engine-[pod-id] -n matching-engine
 
 ---
 
-## 📡 Kafka - Criar e Listar Tópicos
+## 📡 Kafka Topics
+
+### Create a Topic
+
 ```bash
 /opt/kafka/bin/kafka-topics.sh \
   --bootstrap-server kafka-kafka-bootstrap:9092 \
@@ -120,7 +133,11 @@ kubectl logs --previous matching-engine-[pod-id] -n matching-engine
   --topic order_topic \
   --partitions 3 \
   --replication-factor 1
+```
 
+### List Topics
+
+```bash
 /opt/kafka/bin/kafka-topics.sh \
   --bootstrap-server kafka-kafka-bootstrap:9092 \
   --list
@@ -128,7 +145,8 @@ kubectl logs --previous matching-engine-[pod-id] -n matching-engine
 
 ---
 
-## 🧼 Limpar Kafka e Zookeeper
+## 🧼 Clean Kafka/Zookeeper
+
 ```bash
 kubectl delete statefulset kafka -n kafka --cascade=foreground
 kubectl delete statefulset zookeeper -n kafka --cascade=foreground
@@ -140,14 +158,14 @@ kubectl delete namespace kafka
 
 ---
 
-## 🧠 Arquitetura (.dot)
+## 🧠 Architecture Diagram (.dot)
 
 ```dot
 digraph CoinzaScalling {
   rankdir=LR;
   node [shape=box, style=filled, color=lightgray, fontname="Arial"];
 
-  User [label="Usuário"];
+  User [label="User"];
   Ingress [label="Ingress Controller", color=lightblue];
   MatchingEngine [label="Matching Engine (Node.js)"];
   RedisCluster [label="Redis Cluster", color=lightpink];
@@ -160,11 +178,11 @@ digraph CoinzaScalling {
   Ingress -> MatchingEngine;
 
   MatchingEngine -> RedisCluster [label="cache"];
-  MatchingEngine -> Postgres [label="persistência"];
-  MatchingEngine -> Kafka [label="mensageria"];
+  MatchingEngine -> Postgres [label="persistence"];
+  MatchingEngine -> Kafka [label="messaging"];
 
-  Kafka -> Zookeeper [label="coordenação"];
-  InitRedis -> RedisCluster [label="set inicial"];
+  Kafka -> Zookeeper [label="coordination"];
+  InitRedis -> RedisCluster [label="initial set"];
 
   subgraph cluster_backend {
     label = "Back-end Services";
@@ -174,7 +192,7 @@ digraph CoinzaScalling {
   }
 
   subgraph cluster_kafka {
-    label = "Mensageria";
+    label = "Messaging System";
     style=dashed;
     Kafka;
     Zookeeper;
