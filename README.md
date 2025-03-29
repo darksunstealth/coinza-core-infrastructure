@@ -80,11 +80,11 @@
   ## 🐳 Docker
 
   ```bash
-  docker build -t samirsauma/matching-engine:v78 .
-  docker push samirsauma/matching-engine:v78
+  docker build -t <your user>/matching-engine:v78 .
+  docker push <your user>/matching-engine:v78
 
-  docker build -t samirsauma/init-variables-on-redis:v6 .
-  docker push samirsauma/init-variables-on-redis:v6
+  docker build -t <your user>/init-variables-on-redis:v6 .
+  docker push <your user>/init-variables-on-redis:v6
   ```
 
   ---
