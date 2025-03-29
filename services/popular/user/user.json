@@ -1,0 +1,112 @@
+{
+    "id": "admin",
+    "email": "admin@admin",
+    "verified": false,
+    "password": "hashedPasswordHere",
+    "passwordUpdatedAt": "2025-01-15T10:30:00Z",
+    "twoFactorSecret": null,
+    "twoFactorEnabled": false,
+    "twoFactorBackupCodes": [],
+    "p2pName": null,
+    "accountFrozen": false,
+    "volumeTraded": "0.0",
+    "confirmationCode": null,
+    "confirmationCodeExpires": null,
+    "kycLevel": "basic",
+    "riskScore": 0,
+    "phoneNumber": "+55 11 99999-0000",
+    "phoneVerified": false,
+    "preferredLanguage": "pt-BR",
+    "preferredCurrency": "BRL",
+    "notificationsSettings": {
+      "email": true,
+      "sms": false
+    },
+    "themePreference": "dark",
+    "balances": {
+      "BTC": "0.0005",
+      "ETH": "1.2",
+      "BRL": "3000.00"
+    },
+    "lockedBalances": {
+      "BTC": "0.0002",
+      "ETH": "0.1"
+    },
+    "tradingLimits": {
+      "dailyWithdraw": 10000,
+      "monthlyWithdraw": 50000
+    },
+    "referralCode": "ABCD1234",
+    "referredBy": null,
+    "whitelistAddresses": [],
+    "createdAt": "2025-02-02T10:00:00Z",
+    "updatedAt": "2025-02-02T12:00:00Z",
+    "ipCreation": "127.0.0.1",
+    "loginAttempts": [
+      {
+        "id": "attempt_1",
+        "userId": "admin",
+        "email": "admin@admin",
+        "image": null,
+        "deviceInfo": "Browser XYZ",
+        "type": "login",
+        "attemptCount": "1",
+        "failureReason": null,
+        "createdAt": "2025-02-02T12:00:00Z"
+      }
+    ],
+    "changeLog": [],
+    "device": {
+      "id": "device_1",
+      "userId": "admin",
+      "deviceInfo": "Browser XYZ",
+      "deviceCode": null,
+      "confirmed": false,
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2025-02-02T12:00:00Z",
+      "jwtToken": null
+    },
+    "accessType": {
+      "id": "accessType_1",
+      "role": "admin",
+      "canCreate": true,
+      "canRead": true,
+      "canUpdate": true,
+      "canDelete": true
+    },
+    "conformidade": {
+      "id": "conformidade_1",
+      "verificationStatus": false,
+      "sent": false,
+      "documentFront": null,
+      "documentBack": null,
+      "selfie": null,
+      "residenceDocument": null,
+      "approved": null
+    },
+    "extraInfo": {
+      "id": "extraInfo_1",
+      "extraInfoStatus": false,
+      "sent": false,
+      "birthDate": null,
+      "city": null,
+      "state": null,
+      "cpf": null,
+      "cep": null,
+      "address": null,
+      "phone": null,
+      "nationality": null,
+      "profession": null,
+      "identityNumber": null,
+      "identityIssuer": null,
+      "identityIssueDate": null,
+      "residenceType": null,
+      "maritalStatus": null,
+      "spouseName": null,
+      "monthlyIncome": null,
+      "incomeSource": null,
+      "userId": "admin",
+      "approved": null
+    }
+  }
+  

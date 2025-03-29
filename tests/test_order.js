@@ -15,19 +15,32 @@ export let options = {
 const BASE_URL = 'http://127.0.0.1:3000';
 const ORDER_ENDPOINT = '/order';
 
+// Substitua pelos valores reais das suas credenciais
+const API_KEY = '9e7c3d4a-8a1c-4f27-bc6a-3e9f8d70d5a1';
+const API_SECRET = 'your-raw-api-secret-here';
+
 export default function () {
+    // Gera um preço aleatório entre 1000 e 100000
+    const price = Math.floor(Math.random() * (100000 - 1000 + 1)) + 1000;
+    // Gera uma quantidade aleatória entre 0.01 e 5 com 2 casas decimais
+    const amount = (Math.random() * (5 - 0.01) + 0.01).toFixed(2);
+
     // Payload JSON simulando uma ordem
     const payload = JSON.stringify({
-        price: 56, // Preço aleatório entre 1000 e 100000
-        amount: 3, // Quantidade aleatória entre 0.01 e 5
-        market: 'BTC/USDT',
+        price: price,
+        amount: amount,
+        market: 'btc/usdt',  // em minúsculas para bater com a validação do backend
         isMaker: true,
         side: 'buy'
     });
 
-    // Configuração dos headers
+    // Configuração dos headers, incluindo as credenciais de API
     const params = {
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+            'Content-Type': 'application/json',
+            'x-api-key': API_KEY,
+            'x-api-secret': API_SECRET,
+        },
         timeout: '30s',
     };
 
@@ -36,7 +49,7 @@ export default function () {
 
     // Validações dos testes
     const checksResult = check(res, {
-        'Status code é 201': (r) => r.status === 201, // Alterado para 201 (Created)
+        'Status code é 201': (r) => r.status === 201, // Espera código 201 (Created)
         'Tempo de resposta < 500ms': (r) => r.timings.duration < 500,
         'Resposta contém a ordem': (r) => {
             try {

@@ -1,0 +1,74 @@
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: kafka
+  namespace: kafka
+spec:
+  kafka:
+    replicas: 3
+    listeners:
+      - name: plain
+        port: 9092
+        type: internal
+        tls: false
+      - name: external
+        port: 9094
+        type: nodeport
+        tls: false
+        configuration:
+          bootstrap:
+            nodePort: 30092  # Porta externa para conectar ao Kafka
+          brokers:
+            - broker: 0
+              nodePort: 30093
+            - broker: 1
+              nodePort: 30094
+            - broker: 2
+              nodePort: 30095
+    storage:
+      type: ephemeral
+    config:
+      # 🚀 Adicionando advertised.listeners corretamente
+      advertised.listeners: >
+        INTERNAL://kafka-0.kafka.kafka.svc.cluster.local:9092,
+        INTERNAL://kafka-1.kafka.kafka.svc.cluster.local:9092,
+        INTERNAL://kafka-2.kafka.kafka.svc.cluster.local:9092,
+        EXTERNAL://127.0.0.1:30092
+      listener.security.protocol.map: >
+        EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT
+      inter.broker.listener.name: "INTERNAL"
+      num.network.threads: "3"
+      num.io.threads: "8"
+      socket.request.max.bytes: "104857600"
+    resources:
+      requests:
+        cpu: "1"
+        memory: "2Gi"
+      limits:
+        cpu: "2"
+        memory: "4Gi"
+  zookeeper:
+    replicas: 3
+    storage:
+      type: ephemeral
+    config:
+      server.1: >
+        kafka-zookeeper-0.kafka-zookeeper-nodes.kafka.svc.cluster.local:
+        2888:3888:participant
+      server.2: >
+        kafka-zookeeper-1.kafka-zookeeper-nodes.kafka.svc.cluster.local:
+        2888:3888:participant
+      server.3: >
+        kafka-zookeeper-2.kafka-zookeeper-nodes.kafka.svc.cluster.local:
+        2888:3888:participant
+    resources:
+      requests:
+        cpu: "500m"
+        memory: "1Gi"
+      limits:
+        cpu: "1"
+        memory: "2Gi"
+  entityOperator:
+    topicOperator: {}
+    userOperator: {}

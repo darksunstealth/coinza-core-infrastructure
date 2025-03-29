@@ -1,70 +1,84 @@
-
-# ⚡ Coinza Scalling – Distributed Microservice Architecture
-
-This repository showcases the **microservice infrastructure** of Coinza Exchange. It includes authentication, Redis setup, PostgreSQL integration, Kafka communication, and Kubernetes deployments.
-
-> ⚠️ **Important:**  
-> The matching engine processor (C++ component that executed the orderbook logic) is **corrupted** and currently **non-functional**.  
-> This repo **only demonstrates the flow and architecture** of services, not the matching logic.
-
-> 🛠 Some files may be broken, incomplete, or in progress — but **core functionalities remain unaffected**.  
-> As soon as I find time, I’ll fix these issues and improve the system incrementally.
-
-> 🤝 **Feel free to contribute** if you'd like to help bring this system closer to full functionality.
-
----
-
-## 📦 Stack Overview
-
-- **Node.js** – Core services (authentication, user management)
-- **Apache Kafka (Strimzi)** – Event-driven architecture
-- **Redis Cluster** – High-speed distributed cache
-- **PostgreSQL** – Primary relational database
-- **Zookeeper** – Kafka dependency
-- **C++** – Matching engine (currently corrupted)
-- **Kubernetes** – Deployment, scaling, and service orchestration
-- **Docker** – Container builds
-
----
-
-## 🚀 Getting Started
-
-### Helm + Minikube Setup
-
-```bash
 sudo snap install helm --classic
-kubectl config use-context minikube
-```
-
-### Deploy Infrastructure
-
-```bash
 kubectl apply -f k8s/redis/redis-configmap.yaml
 kubectl apply -f k8s/redis/redis-pv.yaml
 kubectl apply -f k8s/redis/redis-service.yaml
 kubectl apply -f k8s/redis/redis-statefulset.yaml
-
-kubectl apply -f k8s/postgres/postgres.yaml
-kubectl apply -f k8s/kafka/kafka.yaml
-kubectl apply -f k8s/zookeeper/zookeeper-deployment.yaml
-kubectl apply -f k8s/zookeeper/zookeeper-service.yaml
-kubectl apply -f k8s/kafka/kafka-statefulset.yaml
-kubectl apply -f k8s/kafka/kafka-service.yaml
-
 kubectl apply -f k8s/matching-engine/deployment.yaml
 kubectl apply -f k8s/matching-engine/hpa-matching-engine.yaml
 kubectl apply -f k8s/matching-engine/matching-engine-service.yaml
+kubectl apply -f k8s/rabbitmq/rabbitmq.yaml
+kubectl apply -f k8s/postgres/postgres.yaml
 kubectl apply -f k8s/matching-engine/matching-engine-ingress.yaml
-
 kubectl apply -f k8s/popular/base/init-variables-on-redis.yaml
+kubectl apply -f k8s/kafka/kafka.yaml
 kubectl apply -f k8s/meuusuario-csr.yaml
-```
 
----
+kubectl create -f https://strimzi.io/install/latest?namespace=kafka
 
-## 🧠 Redis Cluster Setup
 
-```bash
+
+
+g++ -std=c++11 -o kafka_consumer orderbook.cpp -L/usr/local/lib -I/usr/local/include -lcppkafka -lrdkafka
+./kafka_consumer
+
+./bin/zookeeper-server-start.sh config/zookeeper.properties
+
+./bin/kafka-server-start.sh config/server.properties
+
+
+
+
+
+kubectl port-forward svc/matching-engine 8080:80 -n matching-engine
+
+kubectl logs -l app=matching-engine -n matching-engine --tail=100 --follow
+
+kubectl logs matching-engine-7cd648897d-7hlkz -n matching-engine
+kubectl logs -f matching-engine-7cd648897d-7hlkz -n matching-engine
+kubectl logs -l app=matching-engine -n matching-engine --tail=100 --follow
+kubectl logs --previous matching-engine-7cd648897d-7hlkz -n matching-engine
+
+
+
+docker build -t samirsauma/matching-engine:v78 .
+docker push samirsauma/matching-engine:v78
+
+
+
+docker build -t samirsauma/init-variables-on-redis:v6 .
+docker push samirsauma/init-variables-on-redis:v6
+
+
+
+kubectl rollout restart deployment matching-engine -n matching-engine
+
+
+kubectl delete statefulset kafka -n kafka --cascade=foreground
+kubectl delete statefulset zookeeper -n kafka --cascade=foreground
+kubectl delete svc kafka -n kafka
+kubectl delete svc zookeeper -n kafka
+kubectl delete pvc -n kafka --all
+kubectl delete namespace Kafka
+
+
+
+
+
+kubectl exec -it redis-cluster-0 -n redis-cluster -- sh
+
+
+
+
+redis-cli --cluster create \
+  redis-cluster-0.redis-cluster.redis-cluster.svc.cluster.local:6379 \
+  redis-cluster-1.redis-cluster.redis-cluster.svc.cluster.local:6379 \
+  redis-cluster-2.redis-cluster.redis-cluster.svc.cluster.local:6379 \
+  redis-cluster-3.redis-cluster.redis-cluster.svc.cluster.local:6379 \
+  redis-cluster-4.redis-cluster.redis-cluster.svc.cluster.local:6379 \
+  redis-cluster-5.redis-cluster.redis-cluster.svc.cluster.local:6379 \
+  --cluster-replicas 1
+
+
 echo "yes" | redis-cli --cluster create \
   redis-cluster-0.redis-cluster.redis-cluster.svc.cluster.local:6379 \
   redis-cluster-1.redis-cluster.redis-cluster.svc.cluster.local:6379 \
@@ -73,87 +87,44 @@ echo "yes" | redis-cli --cluster create \
   redis-cluster-4.redis-cluster.redis-cluster.svc.cluster.local:6379 \
   redis-cluster-5.redis-cluster.redis-cluster.svc.cluster.local:6379 \
   --cluster-replicas 1
-```
 
----
 
-## 🐳 Docker
+redis-cli -c cluster nodes
 
-```bash
-docker build -t samirsauma/matching-engine:v78 .
-docker push samirsauma/matching-engine:v78
 
-docker build -t samirsauma/init-variables-on-redis:v6 .
-docker push samirsauma/init-variables-on-redis:v6
-```
+kubectl exec -it init-variables-on-redis-5tv42 -n init-variables-on-redis -- sh
 
----
 
-## 📡 Kafka Topics (Example)
 
-```bash
+
+kubectl create namespace kafka
+kubectl apply -f https://strimzi.io/install/latest?namespace=kafka
+
+
+
 kubectl exec -it kafka-0 -n kafka -- \
   /opt/kafka/bin/kafka-topics.sh --create \
   --topic register-api-1 \
   --bootstrap-server localhost:9092 \
   --replication-factor 1 \
   --partitions 1
-```
 
----
 
-## 🔁 Restart Matching Engine
 
-```bash
-kubectl rollout restart deployment matching-engine -n matching-engine
-```
+https://github.com/unclecode/crawl4ai https://github.com/stanford-oval/storm https://github.com/kyegomez/swarms https://github.com/The-Swarm-Corporation/swarms-examples?tab=readme-ov-file https://github.com/David-patrick-chuks/Riona-AI-Agent
 
----
 
-## 🔍 Debugging Logs
 
-```bash
-kubectl logs -l app=matching-engine -n matching-engine --tail=100 --follow
-kubectl logs -f matching-engine-[pod-id] -n matching-engine
-```
 
----
 
-## 🧠 Architecture Overview (.dot)
+g++ -std=c++17 -o orderbook \
+    main.cpp order/orderbook-processor.cpp kafka/kafka-consumer.cpp redis/redis-client.cpp \
+    -I/usr/local/include \
+    -L/usr/local/lib \
+    -lredis++ -lhiredis -lcppkafka -lpthread
 
-```dot
-digraph CoinzaScalling {
-  rankdir=LR;
-  node [shape=box, style=filled, fontname="Arial", color=lightgray];
 
-  User [label="User"];
-  Ingress [label="Ingress Controller", color=lightblue];
-  Register [label="Register API", color=lightgreen];
-  Redis [label="Redis Cluster", color=lightpink];
-  Kafka [label="Kafka", color=orange];
-  Zookeeper [label="Zookeeper", color=lightyellow];
-  Postgres [label="PostgreSQL"];
-  Matching [label="Matching Engine (C++)", color=red, style=filled, fontcolor=white];
+    
+./bin/zookeeper-server-start.sh config/zookeeper.properties
 
-  User -> Ingress;
-  Ingress -> Register;
-  Register -> Redis [label="cache"];
-  Register -> Kafka [label="produce"];
-  Kafka -> Zookeeper;
-  Register -> Postgres;
-
-  // Matching engine is not wired in
-}
-```
-
----
-
-## 🧊 Final Notes
-
-- 🔧 Matching processor (C++) is corrupted and excluded from orchestration.
-- 🪛 Files are under construction. Expect partial implementations.
-- 🤝 Pull requests welcome to improve or complete parts of the system.
-
----
-
-### ✌️ Made by Samir Sauma — Coinza Exchange WaaS
+./bin/kafka-server-start.sh config/server.properties
