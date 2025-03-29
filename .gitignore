@@ -2,3 +2,7 @@ node_modules/
 *.log
 logs/
 services/orderbook/*.log*
+*.audit.json
+package-lock.json
+.clinic
+.vscode
